@@ -1,34 +1,35 @@
 pipeline {
+    agent any
+    
+    environment {
+        git_branch = 'main'
+        git_url = 'git@github.com:maruthibg1998/demo1.git'
+    }
 
-	agent any
+    stages {
 
-	
-	tools {
-  maven 'm360'
-}
-	
-	parameters {
-  string defaultValue: 'adi', name: 'name', trim: true
-}
-	stages {
-	  stage('build') {
-		steps {
-		  sh 'mvn install -DskipTests'
-		}
-	  }
+        stage('Clone') {
+            steps {
+                git branch: "${git_branch}", url: "${git_url}"
+            }
+        }
 
-	  stage('test') {
-		  steps {
-				sh 'echo new'
-			}
-		 post {
-			 always{
-				archiveArtifacts artifacts: 'target/**.jar', followSymlinks: false
-			
-			 }
-			}
-	  }
-		
-}
+        stage('Compile') {
+            steps {
+                sh 'mvn compile'
+            }
+        }
 
+        stage('Test') {
+            steps {
+                sh 'mvn test'
+            }
+        }
+
+        stage('Build Project') {
+            steps {
+                sh 'mvn clean install'
+            }
+        }
+    }
 }
