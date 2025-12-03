@@ -2,7 +2,7 @@ pipeline {
     agent any
     
     environment {
-        git_branch = 'main'
+        git_branch = 'master'
         git_url = 'git@github.com:maruthibg1998/demo1.git'
     }
 
